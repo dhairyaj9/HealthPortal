@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Mail, Lock, User, UserPlus } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -13,7 +12,6 @@ export function SignupForm() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState('patient')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -28,7 +26,7 @@ export function SignupForm() {
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, role }),
+        body: JSON.stringify({ email, password, name }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -72,16 +70,6 @@ export function SignupForm() {
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} className="pl-10" required />
         </div>
-      </div>
-      <div className="space-y-2">
-        <Label>I am a</Label>
-        <Select value={role} onValueChange={setRole}>
-          <SelectTrigger><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="patient">Patient</SelectItem>
-            <SelectItem value="doctor">Doctor</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? 'Creating account...' : (<><UserPlus className="mr-2 h-4 w-4" /> Create Account</>)}
